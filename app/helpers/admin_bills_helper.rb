@@ -1,0 +1,2 @@
+module AdminBillsHelper
+end

@@ -1,0 +1,63 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark-gray">
+  <div class="container">
+    <%= link_to "Reimbursement Portal", root_path, class: "navbar-brand" %>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <% if user_signed_in? %>
+          <% if current_user.has_role?(:admin) %>
+            <li class="nav-item"><%= link_to "Employees", employees_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to "All Bills", admin_bills_path, class: "nav-link" %></li>
+          <% else %>
+            <li class="nav-item"><%= link_to "My Bills", bills_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to "Create Bill", new_bill_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to "Change Password", change_password_employee_path(current_user.id), class: "nav-link" %></li>
+          <% end %>
+        <% end %>
+      </ul>
+      <% if user_signed_in? %>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <%= link_to "Sign Out", destroy_user_session_path, 
+                  data: { confirm: "Are you sure you want to sign out?" },
+                  onclick: "event.preventDefault(); document.getElementById('logout-form').submit();",
+                  class: "btn btn-danger" %>
+          </li>          
+          <%= form_with url: destroy_user_session_path, method: :delete, id: "logout-form", style: "display: none;" do %>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</nav>
+
+<!-- Custom CSS -->
+<style>
+  .navbar {
+    border-bottom: 2px solid #e3e3e3;
+  }
+
+  .navbar-dark .navbar-nav .nav-link {
+    color: #ffffff;
+    font-weight: 500;
+  }
+
+  .navbar-dark .navbar-nav .nav-link:hover {
+    color: #dcdcdc;
+  }
+
+  .navbar-dark .navbar-brand {
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .navbar-dark .navbar-brand:hover {
+    color: #dcdcdc;
+  }
+
+  .bg-dark-gray {
+    background-color: #343a40; /* Dark gray color */
+  }
+</style>

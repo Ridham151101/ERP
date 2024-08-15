@@ -1,0 +1,103 @@
+<h1 class="text-center my-4">Edit Bill</h1>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <%= form_with model: @bill, local: true, html: { class: 'needs-validation', novalidate: true } do |f| %>
+        <div class="form-group mb-3">
+          <%= f.label :bill_type, class: 'form-label' %>
+          <%= f.select :bill_type, options_for_select(Bill.bill_types.keys.map { |type| [type.titleize, type] }, @bill.bill_type), {}, class: 'form-select' %>
+        </div>
+
+        <div class="form-group mb-3">
+          <%= f.label :amount, class: 'form-label' %>
+          <%= f.number_field :amount, step: '1', min: '0', class: 'form-control', required: true, value: @bill.amount.to_i %>
+          <div class="invalid-feedback">
+            Please enter a valid amount.
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+          <%= f.submit 'Update Bill', class: 'btn btn-primary w-100' %>
+        </div>
+      <% end %>
+
+      <div class="form-group mb-3">
+        <%= link_to 'Back', bills_path, class: 'btn btn-secondary w-100' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for form validation -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function(form) {
+      form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+
+    // Improved handling for amount field
+    document.querySelectorAll('input[name="bill[amount]"]').forEach(function(input) {
+      input.addEventListener('input', function(event) {
+        let value = this.value;
+        
+        // Remove all characters except digits
+        value = value.replace(/\D/g, '');
+        
+        // Update the input value without moving the cursor
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        this.value = value;
+        this.setSelectionRange(start, end);
+      });
+    });
+  });
+</script>
+
+<!-- Custom CSS -->
+<style>
+  .form-select, .form-control {
+    border-radius: 0.25rem;
+    border-color: #ced4da;
+  }
+
+  .form-select:focus, .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+    border-color: #38a1db;
+  }
+
+  .invalid-feedback {
+    display: none;
+  }
+
+  .was-validated .form-control:invalid ~ .invalid-feedback {
+    display: block;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
+
+  .btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+  }
+</style>

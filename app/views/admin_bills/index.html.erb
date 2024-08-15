@@ -1,0 +1,85 @@
+<h1 class="text-center my-4">Bills</h1>
+
+<div class="my-3 text-center d-flex justify-content-around">
+  <div class="d-inline-block mx-2">
+    <h5>Total Submitted: <span class="badge bg-primary"><%= @bills.sum(:amount).to_i %></span></h5>
+  </div>
+  <div class="d-inline-block mx-2">
+    <h5>Total Approved: <span class="badge bg-success"><%= @bills.where(status: 'approved').sum(:amount).to_i %></span></h5>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-bordered table-hover table-striped mx-auto" style="max-width: 900px;">
+    <thead class="thead-dark">
+      <tr>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Date of Submission</th>
+        <th>Submitted By</th>
+        <th>Department</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @bills.each do |bill| %>
+        <tr>
+          <td><%= bill.bill_type %></td>
+          <td><%= bill.amount.to_i %></td>
+          <td><%= bill.created_at.strftime("%Y-%m-%d") %></td>
+          <td><%= bill.employee.full_name %></td>
+          <td><%= bill.employee.department.name %></td>
+          <td><%= bill.status.capitalize %></td>
+          <td>
+            <% if can?(:manage, bill) %>
+              <%= form_with(model: bill, url: admin_bill_path(bill), method: :patch, local: true) do |f| %>
+                <div class="input-group">
+                  <%= f.select :status, options_for_select(['pending', 'approved', 'rejected'], bill.status), {}, class: 'form-select' %>
+                  <button class="btn btn-sm btn-primary" type="submit">Update</button>
+                </div>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .table-responsive {
+    display: flex;
+    justify-content: center;
+  }
+  .table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+  }
+  .table th, .table td {
+    vertical-align: middle;
+  }
+  .input-group {
+    width: 100%;
+  }
+  .form-select {
+  border-radius: 0.25rem;
+  border-color: #ced4da;
+  }
+
+  .form-select:focus {
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+    border-color: #38a1db;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+  }
+</style>

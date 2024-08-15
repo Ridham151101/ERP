@@ -1,0 +1,58 @@
+<h1 class="text-center my-4">Bills</h1>
+
+<div class="my-3 text-center d-flex justify-content-around">
+  <div class="d-inline-block mx-2">
+    <h5>Total Submitted: <span class="badge bg-primary"><%= @bills.sum(:amount).to_i %></span></h5>
+  </div>
+  <div class="d-inline-block mx-2">
+    <h5>Total Approved: <span class="badge bg-success"><%= @bills.where(status: 'approved').sum(:amount).to_i %></span></h5>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-bordered table-hover table-striped mx-auto" style="max-width: 900px;">
+    <thead class="thead-dark">
+      <tr>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Date of Submission</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @bills.each do |bill| %>
+        <tr>
+          <td><%= bill.bill_type %></td>
+          <td><%= bill.amount.to_i %></td>
+          <td><%= bill.created_at.strftime("%Y-%m-%d") %></td>
+          <td>
+            <%= bill.status.capitalize %>
+            <% if bill.status == 'pending' %>
+              <%= link_to edit_bill_path(bill), class: 'btn btn-sm btn-link text-primary' do %>
+                <i class="bi bi-pencil fs-5"></i>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .table-responsive {
+    display: flex;
+    justify-content: center;
+  }
+  .table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+  }
+  .table th, .table td {
+    vertical-align: middle;
+  }
+  .input-group {
+    width: 100%;
+  }
+</style>
