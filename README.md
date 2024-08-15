@@ -25,8 +25,8 @@ This Rails 7 application is designed for an employee reimbursement portal that a
 
 1. **Clone the Repository**
 
-git clone https://github.com/yourusername/employee-reimbursement-portal.git
-cd employee-reimbursement-portal
+git clone https://github.com/Ridham151101/ERP.git
+cd ERP
 
 2. **Install Dependencies**
 
